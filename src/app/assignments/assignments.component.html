@@ -1,0 +1,32 @@
+<h1>{{tittle}}</h1>
+
+<div class="container">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="showAddAssignments()">Add assignment
+  </button>
+  <div *ngIf="!addAssignmentVisible">
+    <mat-list *ngFor="let assignment of assignments">
+      <h3 mat-subheader>{{assignment.dueDate | date}}</h3>
+      <mat-list-item (click)="setSelected(assignment)">
+        <p appSubmitted *ngIf="assignment.submitted; else unsubmittted">
+          Assignment {{assignment.name}} has been submitted
+        </p>
+        <ng-template #unsubmittted>
+          <p appUnsubmitted>
+            Assignment {{assignment.name}} hasn´t been submitted
+          </p>
+        </ng-template>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>
+
+<app-add-asignment (addNewAssignment)="addAssignment($event)" *ngIf="addAssignmentVisible"></app-add-asignment>
+
+<app-assignment-detail
+  (changeAssignmentStatus)="onSubmitted($event)"
+  [passedAssignment]="selectedAssignment">
+</app-assignment-detail>
